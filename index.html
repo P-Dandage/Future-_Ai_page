@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future AI Tech | AI Tools & Trends 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body{margin:0;font-family:'Inter',sans-serif;background:#0b0f19;color:#eaeaf0;line-height:1.6}
+    header{background:linear-gradient(135deg,#1f3cff,#00e0ff);padding:40px 20px;text-align:center}
+    header h1{margin:0;font-size:2.6rem}
+    nav{background:#11162a;display:flex;justify-content:center;gap:30px;padding:14px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+    nav a{color:#eaeaf0;text-decoration:none;font-weight:500; font-size: 0.9rem; cursor: pointer;}
+    nav a:hover{color:#00e0ff}
+    
+    /* Admin Nav Button Style */
+    .admin-nav-btn { color: #00e0ff !important; border: 1px solid #00e0ff; padding: 2px 10px; border-radius: 5px; }
+
+    .container{max-width:1100px;margin:auto;padding:40px 20px}
+    .hero{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px;align-items:stretch}
+    .card{background:#151b34;border-radius:18px;padding:25px;box-shadow:0 20px 40px rgba(0,0,0,.3);position:relative;padding-bottom:80px;display:flex;flex-direction:column}
+    .card h3{margin-top:0;color:#00e0ff}
+    .read-more-btn {position: absolute;bottom: 25px;left: 25px;padding: 8px 18px;background: transparent;border: 1px solid #00e0ff;color: #00e0ff;border-radius: 8px;text-decoration: none;font-size: 0.9rem;font-weight: 600;transition: 0.3s;}
+    .read-more-btn:hover { background: #00e0ff; color: #000; }
+    hr{ border: none; border-top: 2px solid #00e0ff; margin: 40px 0;}
+
+    /* --- ADMIN MODAL STYLES --- */
+    .modal-overlay {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: #151b34;
+      padding: 30px;
+      border-radius: 18px;
+      width: 90%;
+      max-width: 600px;
+      border: 2px solid #00e0ff;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 15px; right: 20px;
+      font-size: 1.5rem;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    #adminForm label { display: block; margin-top: 15px; font-weight: 600; color: #00e0ff; }
+    #adminForm input, #adminForm textarea, #adminForm select { width: 100%; padding: 12px; margin: 8px 0; background: #ffffff; color: #000; border: none; border-radius: 8px; box-sizing: border-box; font-size: 1rem;}
+    .btn{font-size: 15px;display:inline-block;margin-top:15px;padding:18px 24px;background:#1f3cff;color:#fff;border-radius:10px;border:none;cursor:pointer;font-weight:700; width: 100%;}
+    
+    footer {background: #070a14;padding: 60px 20px 30px;margin-top: 100px;border-top: 2px solid #00e0ff;text-align: center;}
+    .footer-brand { font-size: 1.9rem; font-weight: 800; color: #fff; margin-bottom: 2.0rem ;}
+    .footer-brand span { color: #00e0ff; }
+    .social-icons { margin-bottom: 30px; display: flex; justify-content: center; gap: 30px; }
+    .social-icons span {width: 40px; height: 40px; line-height: 40px; background: #151b34; border-radius: 50%; display: inline-block; color: #00e0ff; border: 1px solid #00e0ff; cursor: pointer;}
+    .footer-bottom { border-top: 1px solid #1c223a; padding-top: 25px; color: #666; font-size: 0.85rem; }   
+    @media (max-width: 768px) { .hero { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Future AI Tech</h1>
+    <p>AI Tools • Everyday AI Apps • Emerging Tech • AI Trends 2026</p>
+  </header>
+
+  <nav>
+    <a href="#tools">AI Tools</a>
+    <a href="#howto">AI How‑To</a>
+    <a href="#trends">AI Trends</a>
+    <a href="#gadgets">Gadgets</a>
+    <a href="#productivity">Productivity</a>
+    <a onclick="handleAdminLogin()" class="admin-nav-btn">Admin</a>
+  </nav>
+
+  <main class="container">
+    <section id="tools"><h2>AI Tools Reviews</h2><div class="hero" id="tools-container"></div></section>
+    <section id="howto"><h2>AI How‑To Guides</h2><div class="hero" id="howto-container"></div></section>
+    <section id="trends"><h2>AI Trends 2026</h2><div class="hero" id="trends-container"></div></section>
+    <section id="gadgets"><h2>Tech & Gadgets</h2><div class="hero" id="gadgets-container"></div></section>
+    <section id="productivity"><h2>Productivity</h2><div class="hero" id="productivity-container"></div></section>
+  </main>
+
+  <div class="modal-overlay" id="adminModal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="closeAdmin()">&times;</span>
+      <h2 style="color:#00e0ff; margin-top:0;">Admin: Publish Article</h2>
+      <form id="adminForm">
+        <label>Title</label>
+        <input type="text" id="title" placeholder="Article Title" required>
+        <label>Content</label>
+        <textarea id="content" rows="6" placeholder="Full Article Body..." required></textarea>
+        <label>Select Section</label>
+        <select id="section">
+          <option value="tools">AI Tools</option>
+          <option value="howto">AI How-To</option>
+          <option value="trends">AI Trends 2026</option>
+          <option value="gadgets">Tech & Gadgets</option>
+          <option value="productivity">Productivity</option>
+        </select>
+        <button type="submit" class="btn" id="submitBtn">Publish to Database</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-brand">Future <span>AI</span> Tech</div>
+    <div class="social-icons"><span>f</span><span>t</span><span>in</span></div>
+    <div class="footer-bottom">&copy; 2026 Future AI Tech.</div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://mcnevlebbotdemxvkldj.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1jbmV2bGViYm90ZGVteHZrbGRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjgxMTk3MjQsImV4cCI6MjA4MzY5NTcyNH0.OR1Np2Ra7dDQcU5D158WDYn1YXQrwecIa-B9C5DP1hw';
+    const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // --- ADMIN ACCESS LOGIC ---
+    function handleAdminLogin() {
+      const pass = prompt("Enter Admin Password:");
+      if (pass === "admin@123") {
+        document.getElementById('adminModal').style.display = 'flex';
+      } else if (pass !== null) {
+        alert("Incorrect Password!");
+      }
+    }
+
+    function closeAdmin() {
+      document.getElementById('adminModal').style.display = 'none';
+    }
+
+    // --- CONTENT RENDERING ---
+    function createCard(item) {
+      const card = document.createElement('div');
+      card.className = 'card';
+      const shortText = item.content.length > 200 ? item.content.substring(0, 200) + "..." : item.content;
+      card.innerHTML = `<h3>${item.title}</h3><p>${shortText}</p><a href="article.html?id=${item.id}" class="read-more-btn">Read More</a>`;
+      return card;
+    }
+
+    document.getElementById('adminForm').addEventListener('submit', async function(e){
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.innerText = 'Publishing...';
+      btn.disabled = true;
+
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const sectionId = document.getElementById('section').value;
+
+      const { data, error } = await _supabase
+        .from('articles')
+        .insert([{ title, content, section_id: sectionId }]);
+
+      if (error) {
+        alert('Error: ' + error.message);
+      } else {
+        alert('Article stored in Supabase successfully!');
+        this.reset();
+        closeAdmin(); // Close dialog after publishing
+        renderContent();
+      }
+      btn.innerText = 'Publish to Database';
+      btn.disabled = false;
+    });
+
+    async function renderContent() {
+      const ids = ['tools', 'howto', 'trends', 'gadgets', 'productivity'];
+      ids.forEach(id => { const el = document.getElementById(id + '-container'); if(el) el.innerHTML = 'Loading...'; });
+
+      const { data: articles, error } = await _supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Fetch error:', error);
+        return;
+      }
+
+      ids.forEach(id => { document.getElementById(id + '-container').innerHTML = ''; });
+
+      articles.forEach((item) => {
+        const container = document.getElementById(`${item.section_id}-container`);
+        if(container) container.appendChild(createCard(item));
+      });
+    }
+
+    window.onload = renderContent;
+  </script>
+</body>
+</html>
